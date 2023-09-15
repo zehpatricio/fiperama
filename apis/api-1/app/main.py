@@ -1,7 +1,7 @@
 import uvicorn
 from fastapi import FastAPI
 
-from app.web.routes import health, auth
+from .web.routes import health, auth
 
 
 app = FastAPI()
