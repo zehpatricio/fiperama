@@ -2,6 +2,8 @@ from dataclasses import dataclass
 
 
 @dataclass
-class Model:
-    # Model Example
-    pass
+class Car:
+    code: int
+    model: str
+    notes: str
+    brand: str
