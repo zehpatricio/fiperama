@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends
 
 from app.web.schemas import ImportDataResult
 from app.web.dependencies import make_import_data_service
-from app.core.services import ImportDataService
+from app.core.services import ImportBrandsService
 
 
 router = APIRouter()
@@ -15,7 +15,7 @@ router = APIRouter()
     response_model=ImportDataResult
 )
 async def import_data(
-    service: ImportDataService = Depends(make_import_data_service)
+    service: ImportBrandsService = Depends(make_import_data_service)
 ) -> ImportDataResult:
     
     service()

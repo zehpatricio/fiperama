@@ -10,10 +10,16 @@ services:
   #     - rabbitmq
   #     - mongodb
   #   environment:
-  #     RABBITMQ_USERNAME: ${RABBITMQ_USERNAME}
-  #     RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD}
+  #     QUEUE_HOST: ${QUEUE_HOST}
+  #     QUEUE_PORT: ${QUEUE_PORT}
+  #     QUEUE_USERNAME: ${QUEUE_USERNAME}
+  #     QUEUE_PASSWORD: ${QUEUE_PASSWORD}
+  #     QUEUE_NAME: ${QUEUE_NAME}
+  #     FIPE_BASE_URL: ${FIPE_BASE_URL}
   #     MONGO_USERNAME: ${MONGO_USERNAME}
   #     MONGO_PASSWORD: ${MONGO_PASSWORD}
+  #     SECRET_KEY: ${SECRET_KEY}
+  #     ALGORITHM: ${ALGORITHM}
 
   # api-2:
   #   build:
@@ -22,8 +28,11 @@ services:
   #     - rabbitmq
   #     - mongodb
   #   environment:
-  #     RABBITMQ_USERNAME: ${RABBITMQ_USERNAME}
-  #     RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD}
+  #     QUEUE_HOST: ${QUEUE_HOST}
+  #     QUEUE_PORT: ${QUEUE_PORT}
+  #     QUEUE_USERNAME: ${QUEUE_USERNAME}
+  #     QUEUE_PASSWORD: ${QUEUE_PASSWORD}
+  #     FIPE_BASE_URL: ${FIPE_BASE_URL}
   #     MONGO_USERNAME: ${MONGO_USERNAME}
   #     MONGO_PASSWORD: ${MONGO_PASSWORD}
 
@@ -33,9 +42,9 @@ services:
       - "5672:5672"
       - "15672:15672"
     environment:
-      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USERNAME}
-      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD}
-
+      RABBITMQ_DEFAULT_USER: ${QUEUE_USERNAME}
+      RABBITMQ_DEFAULT_PASS: ${QUEUE_PASSWORD}
+      
   mongodb:
     image: mongo:latest
     ports:

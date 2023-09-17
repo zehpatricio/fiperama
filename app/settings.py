@@ -12,6 +12,8 @@ class Settings(BaseSettings):
     queue_password: str
     queue_name: str
 
+    db_connection_str: str
+
     fipe_base_url: str
 
     class Config:

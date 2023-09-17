@@ -1,11 +1,12 @@
 from .base_service import BaseService
 
-class ImportDataService(BaseService):
+
+class ImportCarsService(BaseService):
     """
     Service to fetch data and send it to the queue.
     """
     def __call__(self):
-        data = self.fipe_repository.get_marcas()
+        data = self.fipe_repository.get_brands()
 
         for item in data:
             self.queue_repository.publish_message(str(item))
