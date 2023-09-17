@@ -28,8 +28,6 @@ class QueueRepository:
             )
         )
         self.channel = self.connection.channel()
-        
-        # Declare the queue
         self.channel.queue_declare(queue=self.queue_name)
 
     def publish_message(self, message):

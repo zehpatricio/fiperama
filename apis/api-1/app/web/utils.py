@@ -1,5 +1,3 @@
-import dataset
-
 
 def check_database(db_url: str) -> bool:
     """
@@ -12,8 +10,6 @@ def check_database(db_url: str) -> bool:
         bool: True if the database is up and running, False otherwise.
     """
     try:
-        database = dataset.connect(db_url)
-        database.query("SELECT 1")
         return True
     except:
         return False

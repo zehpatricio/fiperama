@@ -36,3 +36,16 @@ class FipeRepository:
         except requests.exceptions.HTTPError:
             # TODO: log exception tracetrack
             raise CouldNotConnectToFipeAPI(response.status_code)
+    
+    def get_marcas(self):
+        """
+        Send a GET request to the "marcas" endpoint.
+
+        Raises:
+            CouldNotConnectToFipeAPI: if there is any error in the connection 
+                with FipeAPI.
+
+        Returns:
+            List[dict]: The list of marcas.
+        """
+        return self.get('fipe/api/v1/carros/marcas')
