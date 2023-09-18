@@ -62,4 +62,4 @@ class FipeRepository:
             List[dict]: The list of cars.
         """
         response = self.get(f'fipe/api/v1/carros/marcas/{brand_id}/modelos')
-        return response.json()['modelos']
+        return response['modelos']

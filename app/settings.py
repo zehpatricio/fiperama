@@ -13,8 +13,11 @@ class Settings(BaseSettings):
     queue_name: str
 
     db_connection_str: str
+    db_name: str
+    db_collection_name: str
 
     fipe_base_url: str
 
     class Config:
         env_file = ".env"
+        extra = "allow"

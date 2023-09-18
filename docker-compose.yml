@@ -3,7 +3,8 @@ version: '3'
 services:
   # api-1:    
   #   build:
-  #     context: apis/api-1
+  #     context: .
+  #     dockerfile: api1.Dockerfile
   #   ports:
   #     - "8000:8000"
   #   depends_on:
@@ -21,39 +22,40 @@ services:
   #     SECRET_KEY: ${SECRET_KEY}
   #     ALGORITHM: ${ALGORITHM}
 
-  # api-2:
-  #   build:
-  #     context: apis/api-2
-  #   depends_on:
-  #     - rabbitmq
-  #     - mongodb
-  #   environment:
-  #     QUEUE_HOST: ${QUEUE_HOST}
-  #     QUEUE_PORT: ${QUEUE_PORT}
-  #     QUEUE_USERNAME: ${QUEUE_USERNAME}
-  #     QUEUE_PASSWORD: ${QUEUE_PASSWORD}
-  #     FIPE_BASE_URL: ${FIPE_BASE_URL}
-  #     MONGO_USERNAME: ${MONGO_USERNAME}
-  #     MONGO_PASSWORD: ${MONGO_PASSWORD}
+  api-2:
+    build:
+      context: .
+      dockerfile: api2.Dockerfile
+    # depends_on:
+    #   - rabbitmq
+    #   - mongodb
+    environment:
+      QUEUE_HOST: ${QUEUE_HOST}
+      QUEUE_PORT: ${QUEUE_PORT}
+      QUEUE_USERNAME: ${QUEUE_USERNAME}
+      QUEUE_PASSWORD: ${QUEUE_PASSWORD}
+      FIPE_BASE_URL: ${FIPE_BASE_URL}
+      MONGO_USERNAME: ${MONGO_USERNAME}
+      MONGO_PASSWORD: ${MONGO_PASSWORD}
 
-  rabbitmq:
-    image: rabbitmq:3-management
-    ports:
-      - "5672:5672"
-      - "15672:15672"
-    environment:
-      RABBITMQ_DEFAULT_USER: ${QUEUE_USERNAME}
-      RABBITMQ_DEFAULT_PASS: ${QUEUE_PASSWORD}
+  # rabbitmq:
+  #   image: rabbitmq:3-management
+  #   ports:
+  #     - "5672:5672"
+  #     - "15672:15672"
+  #   environment:
+  #     RABBITMQ_DEFAULT_USER: ${QUEUE_USERNAME}
+  #     RABBITMQ_DEFAULT_PASS: ${QUEUE_PASSWORD}
       
-  mongodb:
-    image: mongo:latest
-    ports:
-      - "27017:27017"
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USERNAME}
-      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
-    volumes:
-      - mongodb-data:/data/db
+  # mongodb:
+  #   image: mongo:latest
+  #   ports:
+  #     - "27017:27017"
+  #   environment:
+  #     MONGO_INITDB_ROOT_USERNAME: ${MONGO_USERNAME}
+  #     MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
+  #   volumes:
+  #     - mongodb-data:/data/db
 
 volumes:
   mongodb-data:

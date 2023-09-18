@@ -18,8 +18,8 @@ class ImportCarsService(BaseService):
         super().__init__(fipe_repository, queue_repository)
         self.cars_repository = cars_repository
 
-    def import_cars(self, brand_data):
-        brand = json.loads(brand_data)
+    def import_cars(self, _, __, ___, brand_data):
+        brand = json.loads(brand_data.decode('utf-8').replace("'", "\""))
         cars = self.fipe_repository.fetch_cars(brand["codigo"])
         for car in cars:
             self.cars_repository.insert(car)

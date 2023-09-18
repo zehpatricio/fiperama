@@ -23,17 +23,8 @@ class CarsRepository:
 
         Args:
             data (dict): The car data to insert.
-
-        Returns:
-            Car: A Car instance representing the inserted car.
         """
-        result = self.collection.insert_one(data)
-        return Car(
-            code=result["code"], 
-            model=result["model"],
-            notes=result["notes"],
-            brand=result["brand"]
-        )
+        self.collection.insert_one(data)
 
     def update(self, filter_query, update_data):
         """
