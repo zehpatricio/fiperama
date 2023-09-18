@@ -1,4 +1,4 @@
-from typing import List
+from typing import Union, List
 from dataclasses import asdict
 
 import pymongo
@@ -49,22 +49,32 @@ class BrandsRepository:
         result = self.collection.update_many(filter_query, update_data)
         return result.modified_count
 
-    def find(self, filter_query: dict) -> List[Brand]:
+    def find(
+        self, 
+        filter_query: dict, 
+        include_fields: list[str] = None
+    ) -> Union[List[Brand], dict]:
         """
         Find brands in the MongoDB collection that match the filter query.
 
         Args:
             filter_query (dict): The query to filter brands.
+            include_fields (list[dict]): The fields to include in the result. 
+                If not provided all fields will be included.
 
         Returns:
-            list[Brand]: A list of Brand instances.
+            Union(list[Brand], dict): A list of Brand instances or a dict with 
+                the `include_fields` fields.
         """
-        cursor = self.collection.find(filter_query)
+        cursor = self.collection.find(filter_query, projection=include_fields)
         result = []
 
         for brand in cursor:
-            cars = [Car(**car) for car in brand.pop('cars')]
-            brand_instance = Brand(**brand, cars=cars)
-            result.append(brand_instance)
+            if not include_fields:
+                cars = [Car(**car) for car in brand.pop('cars')]
+                brand_instance = Brand(**brand, cars=cars)
+                result.append(brand_instance)
+            else:
+                result.append(brand)
 
         return result

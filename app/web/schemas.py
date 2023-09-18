@@ -1,3 +1,5 @@
+from typing import List
+
 from pydantic import BaseModel
 
 
@@ -13,3 +15,12 @@ class Credentials(BaseModel):
 
 class ImportDataResult(BaseModel):
     details: str
+
+
+class Brand(BaseModel):
+    code: str
+    name: str
+
+
+class FetchBrands(BaseModel):
+    brands: List[Brand]
