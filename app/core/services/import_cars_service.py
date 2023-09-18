@@ -19,6 +19,9 @@ class ImportCarsService(BaseService):
         self.cars_repository = cars_repository
 
     def import_cars(self, _, __, ___, brand_data):
+        
+        print(f'[-] Received {brand_data}')
+        
         brand = json.loads(brand_data.decode('utf-8').replace("'", "\""))
         cars = self.fipe_repository.fetch_cars(brand["codigo"])
         for car in cars:

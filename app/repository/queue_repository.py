@@ -20,6 +20,10 @@ class QueueRepository:
 
         # Establish a connection to RabbitMQ
         credentials = pika.PlainCredentials(username, password)
+        print('\n\n\n')
+        print(credentials)
+        print(username, password)
+        print('\n\n\n')
         self.connection = pika.BlockingConnection(
             pika.ConnectionParameters(
                 host=self.host, 
