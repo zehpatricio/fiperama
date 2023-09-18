@@ -1,4 +1,3 @@
-import unittest
 from unittest.mock import Mock
 import pytest
 
@@ -23,13 +22,13 @@ def service(mock_fipe_repository, mock_queue_repository):
 
 def test_call_method(service, mock_fipe_repository, mock_queue_repository):
     mock_data = [{'codigo': '163', 'nome': 'Wake'}]
-    mock_fipe_repository.get_brands.return_value = mock_data
+    mock_fipe_repository.fetch_brands.return_value = mock_data
 
     mock_queue_repository.publish_message.side_effect = [None, None]
 
     service()
 
-    mock_fipe_repository.get_brands.assert_called_once()
+    mock_fipe_repository.fetch_brands.assert_called_once()
     mock_queue_repository.publish_message.assert_called_with(
         "{'codigo': '163', 'nome': 'Wake'}"
     )

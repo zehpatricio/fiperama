@@ -1,14 +1,28 @@
+import json
+
+from app.repository import FipeRepository, QueueRepository, CarsRepository
 from .base_service import BaseService
 
 
 class ImportCarsService(BaseService):
     """
-    Service to fetch data and send it to the queue.
+    Service to fetch cars data and persist it into the database.
     """
+
+    def __init__(
+        self, 
+        fipe_repository: FipeRepository, 
+        queue_repository: QueueRepository,
+        cars_repository: CarsRepository
+    ) -> None:
+        super().__init__(fipe_repository, queue_repository)
+        self.cars_repository = cars_repository
+
+    def import_cars(self, brand_data):
+        brand = json.loads(brand_data)
+        cars = self.fipe_repository.fetch_cars(brand["codigo"])
+        for car in cars:
+            self.cars_repository.insert(car)
+
     def __call__(self):
-        data = self.fipe_repository.get_brands()
-
-        for item in data:
-            self.queue_repository.publish_message(str(item))
-
-        print(f"Published {len(data)} items to the queue.")
+        self.queue_repository.consume_messages(self.import_cars)
