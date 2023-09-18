@@ -1,6 +1,7 @@
 from unittest.mock import Mock
 import pytest
 
+from app.core.models import Brand
 from app.core.services import ImportBrandsService
 
 
@@ -21,7 +22,7 @@ def service(mock_fipe_repository, mock_queue_repository):
 
 
 def test_call_method(service, mock_fipe_repository, mock_queue_repository):
-    mock_data = [{'codigo': '163', 'nome': 'Wake'}]
+    mock_data = [Brand(code='163', name='Wake', cars=[])]
     mock_fipe_repository.fetch_brands.return_value = mock_data
 
     mock_queue_repository.publish_message.side_effect = [None, None]
@@ -30,5 +31,5 @@ def test_call_method(service, mock_fipe_repository, mock_queue_repository):
 
     mock_fipe_repository.fetch_brands.assert_called_once()
     mock_queue_repository.publish_message.assert_called_with(
-        "{'codigo': '163', 'nome': 'Wake'}"
+        "{'code': '163', 'name': 'Wake', 'cars': []}"
     )

@@ -1,8 +1,11 @@
 from unittest.mock import MagicMock
+from dataclasses import asdict
+
 import pytest
 import pymongo
 
-from app.repository import CarsRepository
+from app.core.models import Brand
+from app.repository import BrandsRepository
 
 
 @pytest.fixture
@@ -22,7 +25,7 @@ def mock_mongo_connection(monkeypatch, mock_mongo_client):
 @pytest.fixture
 def repository():
 
-    repo = CarsRepository(
+    repo = BrandsRepository(
         "mongodb://localhost:27017/",
         "test_cars_db",
         "test_cars_collection"
@@ -37,15 +40,18 @@ def mock_mongo_collection(mock_mongo_client):
 
 
 def test_insert(repository, mock_mongo_collection):
-    data = {
-        'code': 1,
-        'model': 'Test Model',
-        'notes': 'Test Notes',
-        'brand': 'Test Brand'
-    }
+    data = Brand(
+        code='1',
+        name='Brand',
+        cars=[{
+            'code': 1,
+            'model': 'Test Model',
+            'notes': 'Test Notes',
+        }]
+    )
 
     repository.insert(data)
-    mock_mongo_collection.insert_one.assert_called_with(data)
+    mock_mongo_collection.insert_one.assert_called_with(asdict(data))
 
 
 def test_find(repository, mock_mongo_collection):
@@ -56,12 +62,15 @@ def test_find(repository, mock_mongo_collection):
 
 
 def test_update(repository, mock_mongo_collection):
-    initial_data = {
-        'code': 2,
-        'model': 'Initial Model',
-        'notes': 'Initial Notes',
-        'brand': 'Initial Brand'
-    }
+    initial_data = Brand(
+        code='1',
+        name='Brand',
+        cars=[{
+            'code': 2,
+            'model': 'Initial Model',
+            'notes': 'Initial Notes',
+        }]
+    )
     repository.insert(initial_data)
 
     filter_query = {'code': 2}

@@ -1,5 +1,7 @@
 import requests
+from typing import List
 
+from app.core.models import Brand, Car
 from .exceptions import CouldNotConnectToFipeAPI
 
 
@@ -13,7 +15,7 @@ class FipeRepository:
         """
         self.base_url = base_url
 
-    def get(self, endpoint, params=None):
+    def get(self, endpoint, params=None) -> dict:
         """
         Send a GET request to the API.
 
@@ -37,7 +39,7 @@ class FipeRepository:
             # TODO: log exception tracetrack
             raise CouldNotConnectToFipeAPI(response.status_code)
     
-    def fetch_brands(self):
+    def fetch_brands(self) -> List[Brand]:
         """
         Send a GET request to the "brands" endpoint.
 
@@ -48,9 +50,14 @@ class FipeRepository:
         Returns:
             List[dict]: The list of brands.
         """
-        return self.get('fipe/api/v1/carros/marcas')
+        brands_json = self.get('fipe/api/v1/carros/marcas')
+        brands = [
+            Brand(code=brand['codigo'], name=brand['nome'], cars=[]) 
+            for brand in brands_json
+        ]
+        return brands
 
-    def fetch_cars(self, brand_id):
+    def fetch_cars(self, brand_id) -> List[Brand]:
         """
         Send a GET request to the "modelos" endpoint.
 
@@ -61,5 +68,9 @@ class FipeRepository:
         Returns:
             List[dict]: The list of cars.
         """
-        response = self.get(f'fipe/api/v1/carros/marcas/{brand_id}/modelos')
-        return response['modelos']
+        cars_json = self.get(f'fipe/api/v1/carros/marcas/{brand_id}/modelos')
+        cars = [
+            Car(code=car['codigo'], model=car['nome'])
+            for car in cars_json['modelos']
+        ]
+        return cars

@@ -1,13 +1,16 @@
+from dataclasses import asdict
+
 from .base_service import BaseService
+
 
 class ImportBrandsService(BaseService):
     """
     Service to fetch data and send it to the queue.
     """
     def __call__(self):
-        data = self.fipe_repository.fetch_brands()
+        brands = self.fipe_repository.fetch_brands()
 
-        for item in data:
-            self.queue_repository.publish_message(str(item))
+        for brand in brands:
+            self.queue_repository.publish_message(str(asdict(brand)))
 
-        print(f"Published {len(data)} items to the queue.")
+        print(f"Published {len(brands)} items to the queue.")

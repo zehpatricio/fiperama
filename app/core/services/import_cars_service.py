@@ -1,6 +1,7 @@
 import json
 
-from app.repository import FipeRepository, QueueRepository, CarsRepository
+from app.core.models import Brand
+from app.repository import FipeRepository, QueueRepository, BrandsRepository
 from .base_service import BaseService
 
 
@@ -13,19 +14,21 @@ class ImportCarsService(BaseService):
         self, 
         fipe_repository: FipeRepository, 
         queue_repository: QueueRepository,
-        cars_repository: CarsRepository
+        brands_repository: BrandsRepository
     ) -> None:
         super().__init__(fipe_repository, queue_repository)
-        self.cars_repository = cars_repository
+        self.brands_repository = brands_repository
 
     def import_cars(self, _, __, ___, brand_data):
+        print(f'[+] Received {brand_data}')
         
-        print(f'[-] Received {brand_data}')
+        brand_dict = json.loads(brand_data.decode('utf-8').replace("'", "\""))
+        brand = Brand(**brand_dict)
         
-        brand = json.loads(brand_data.decode('utf-8').replace("'", "\""))
-        cars = self.fipe_repository.fetch_cars(brand["codigo"])
-        for car in cars:
-            self.cars_repository.insert(car)
+        cars = self.fipe_repository.fetch_cars(brand.code)
+        brand.cars = cars
+        
+        self.brands_repository.insert(brand)
 
     def __call__(self):
         self.queue_repository.consume_messages(self.import_cars)

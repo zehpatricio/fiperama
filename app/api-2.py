@@ -2,7 +2,7 @@ import time
 
 import pika
 
-from app.repository import FipeRepository, QueueRepository, CarsRepository
+from app.repository import FipeRepository, QueueRepository, BrandsRepository
 from app.core.services import ImportCarsService
 from app.settings import Settings
 
@@ -26,7 +26,7 @@ if __name__ == '__main__':
             time.sleep(seconds)
     
     fipe_repository = FipeRepository(settings.fipe_base_url)
-    cars_repository = CarsRepository(
+    cars_repository = BrandsRepository(
         settings.db_connection_str, 
         settings.db_name, 
         settings.db_collection_name
